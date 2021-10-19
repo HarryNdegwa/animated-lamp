@@ -27,7 +27,7 @@ exports.schema = gql`
 
   extend type Mutation {
     addCar(input: CarInput): String
-    updateCar(input: CarInput): String
+    updateCar(input: CarInput, carId: Int): String
   }
 `;
 
@@ -81,9 +81,9 @@ exports.resolvers = {
       try {
         const payload = { ...input, UserId: req.userId };
 
-        // await db.Car.create({
-        //   ...payload,
-        // });
+        await db.Car.create({
+          ...payload,
+        });
 
         return "Success!";
       } catch (error) {
