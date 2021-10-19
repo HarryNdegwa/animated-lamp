@@ -38,7 +38,7 @@ exports.schema = gql`
   }
 
   extend type Mutation {
-    register: AuthResponse!
+    register(input: UserInput): AuthResponse!
     login(input: UserInput): AuthResponse!
   }
 `;
@@ -89,6 +89,28 @@ exports.resolvers = {
       } catch (error) {
         console.log(`error`, error);
         res.status(500).send("Something is wrong!");
+      }
+    },
+
+    async register(root, { input }, { db, res, req }, info) {
+      try {
+        const data = await db.User.create({
+          username: input.username,
+          password: bcrypt.hashSync(input.password, 8),
+        });
+
+        if (data.id) {
+          return {
+            token: generateToken(data),
+          };
+        }
+      } catch (error) {
+        console.log(`error`, error);
+        if (error.parent.detail) {
+          res.status(400).send("Username already exists!");
+        } else {
+          res.status(500).send("Something is wrong!");
+        }
       }
     },
   },
