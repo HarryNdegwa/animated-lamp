@@ -3,13 +3,14 @@ const cors = require("cors");
 const http = require("http");
 const socketio = require("socket.io");
 const path = require("path");
-
+const jwt = require("jsonwebtoken");
 const userRoutes = require("./routes/users");
 const carRoutes = require("./routes/cars");
 const db = require("./models/index");
 const sock = require("./util/sock");
 const { ApolloServer } = require("apollo-server-express");
 const schema = require("./schema");
+const { SECRET_KEY } = require("./constants");
 // const CarResolver = require("./resolvers/carResolvers");
 const app = express();
 
@@ -38,6 +39,18 @@ sock(io);
 const apolloServer = new ApolloServer({
   schema,
   context: ({ req, res }) => {
+    const rawToken = req.headers["authorization"];
+    if (rawToken) {
+      const [_, token] = rawToken.split(" ");
+
+      jwt.verify(token, SECRET_KEY, (err, decoded) => {
+        if (err) {
+          return res.status(401).send("Not authorised!");
+        }
+
+        req.userId = decoded.id;
+      });
+    }
     return { db, req, res };
   },
 });
