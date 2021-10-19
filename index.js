@@ -8,30 +8,41 @@ const userRoutes = require("./routes/users");
 const carRoutes = require("./routes/cars");
 const db = require("./models/index");
 const sock = require("./util/sock");
-
+const { ApolloServer } = require("apollo-server-express");
+const schema = require("./schema");
+// const CarResolver = require("./resolvers/carResolvers");
 const app = express();
 
-if (process.env.NODE_ENV !== "production") {
-  const corsOptions = {
-    origin: "*",
-  };
+const corsOptions = {
+  origin: "*",
+};
 
-  app.use(cors(corsOptions));
-}
+app.use(cors(corsOptions));
+// if (process.env.NODE_ENV !== "production") {
+// }
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "client/build")));
-}
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static(path.join(__dirname, "client/build")));
+// }
 
-const server = http.createServer(app);
+const httpServer = http.createServer(app); // This is the http server
 
-const io = socketio(server, {
+const io = socketio(httpServer, {
   cors: {
     origin: "*",
   },
 });
 
 sock(io);
+
+const apolloServer = new ApolloServer({
+  schema,
+  context: (req, res) => {
+    return { db, res, req };
+  },
+});
+
+apolloServer.applyMiddleware({ app, cors: false });
 
 // db.sequelize.sync({ force: true });
 db.sequelize.sync();
@@ -44,11 +55,11 @@ app.use("/v1", userRoutes);
 app.use("/v1", carRoutes);
 
 app.get("*", (req, res) => {
+  // Catches all invalid urls
   res.sendFile(path.join(__dirname, "client/build/index.html"));
 });
 
 const PORT = process.env.PORT || 5000;
-
-server.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`Listening to port ${PORT}...`);
 });
