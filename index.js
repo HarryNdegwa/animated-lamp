@@ -37,8 +37,8 @@ sock(io);
 
 const apolloServer = new ApolloServer({
   schema,
-  context: (req, res) => {
-    return { db, res, req };
+  context: ({ req, res }) => {
+    return { db, req, res };
   },
 });
 
