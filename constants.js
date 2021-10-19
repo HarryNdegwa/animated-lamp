@@ -1,4 +1,0 @@
-exports.SECRET_KEY = "Harrison";
-exports.CLOUDINARY_CLOUD_NAME = "dybij6x3m";
-exports.CLOUDINARY_API_KEY = "827346265893281";
-exports.CLOUDINARY_API_SECRET = "vqrChiU8votB3D0i8WAGAIjP8bw";
