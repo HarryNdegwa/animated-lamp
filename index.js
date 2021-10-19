@@ -11,7 +11,6 @@ const sock = require("./util/sock");
 const { ApolloServer } = require("apollo-server-express");
 const schema = require("./schema");
 const { SECRET_KEY } = require("./constants");
-// const CarResolver = require("./resolvers/carResolvers");
 const app = express();
 
 const corsOptions = {
