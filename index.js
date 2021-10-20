@@ -44,7 +44,7 @@ const apolloServer = new ApolloServer({
 
       jwt.verify(token, SECRET_KEY, (err, decoded) => {
         if (err) {
-          return res.status(401).send("Not authorised!");
+          // return res.status(401).send("Not authorised!");
         }
 
         req.userId = decoded.id;

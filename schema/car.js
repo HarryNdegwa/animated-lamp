@@ -11,9 +11,19 @@ exports.schema = gql`
     location: String!
   }
 
+  type CarResponse {
+    id: ID!
+    name: String!
+    make: String!
+    model: String!
+    year: String!
+    images: [String]
+    location: String
+  }
+
   extend type Query {
-    car(id: ID!): Car
-    cars: [Car]
+    car(id: ID!): CarResponse
+    cars: [CarResponse]
   }
 
   input CarInput {
