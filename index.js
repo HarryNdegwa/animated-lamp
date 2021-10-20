@@ -47,7 +47,11 @@ const apolloServer = new ApolloServer({
           // return res.status(401).send("Not authorised!");
         }
 
-        req.userId = decoded.id;
+        if (decoded && decoded.id) {
+          req.userId = decoded.id;
+        } else {
+          req.userId = null;
+        }
       });
     }
     return { db, req, res };

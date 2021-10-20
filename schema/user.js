@@ -45,7 +45,7 @@ exports.schema = gql`
 
 const generateToken = (user) => {
   return jwt.sign({ id: user.id }, SECRET_KEY, {
-    expiresIn: 86400,
+    expiresIn: 8640000,
   });
 };
 
