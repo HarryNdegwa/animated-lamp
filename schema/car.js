@@ -1,4 +1,5 @@
 const { gql } = require("apollo-server-express");
+const { fetchUser } = require("../util/user");
 
 exports.schema = gql`
   type Car {
@@ -21,8 +22,21 @@ exports.schema = gql`
     location: String
   }
 
+  type SingleCarResponse {
+    id: ID!
+    name: String!
+    make: String!
+    model: String!
+    year: String!
+    images: [String]
+    location: String
+    UserId: Int
+    owner: User
+    # me: User
+  }
+
   extend type Query {
-    car(id: ID!): CarResponse
+    car(id: ID!): SingleCarResponse
     cars: [CarResponse]
   }
 
@@ -69,14 +83,18 @@ exports.resolvers = {
         if (!req.userId) {
           car = await db.Car.findOne({
             attributes: { exclude: ["location"] },
-            where: { id },
+            where: { id: parseInt(id, 10) },
           });
           if (car) {
             car.images = car.images.slice(0, 2);
           }
         } else {
-          car = await db.Car.findOne({ where: { id } });
+          car = await db.Car.findOne({ where: { id: parseInt(id, 10) } });
         }
+
+        let owner = await fetchUser(car.UserId, db);
+
+        car.owner = owner;
 
         return car;
       } catch (error) {

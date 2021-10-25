@@ -16,9 +16,26 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
+// {
+//   __typename: "Todo",
+//   text: "First todo",
+//   completed: false,
+//   date: "2020-07-08T15:05:32.248Z",
+//   user: {
+//     email: "me@apollographql.com",
+//   }
+// }
+
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Todo: {
+        // keyFields:["todoId"],
+        // keyFields: ["date", "user", ["email"]],
+      },
+    },
+  }),
 });
 
 export default client;

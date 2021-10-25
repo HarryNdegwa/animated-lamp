@@ -13,3 +13,23 @@ export const GET_CARS = gql`
     }
   }
 `;
+
+export const GET_CAR = gql`
+  query GetCar($id: ID!) {
+    car(id: $id) {
+      id
+      name
+      make
+      model
+      images
+      location
+      year
+      owner {
+        username
+      }
+    }
+    # me {
+    #   username
+    # }
+  }
+`;

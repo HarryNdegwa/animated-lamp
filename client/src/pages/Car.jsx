@@ -6,6 +6,8 @@ import Carousel from "react-bootstrap/Carousel";
 import { createNewChat, getMe, getUser } from "../redux/reducers/api/auth";
 import { Link } from "react-router-dom";
 import Loading from "../components/Loading";
+import { useQuery } from "@apollo/client";
+import { GET_CAR } from "../apollo/queries/car";
 
 export default function Car() {
   const [car, setCar] = useState(null);
@@ -18,48 +20,65 @@ export default function Car() {
   const [owner, setOwner] = useState(null);
   const [startingChat, setStartingChat] = useState(false);
   const history = useHistory();
+  const {
+    loading: gloading,
+    error,
+    data: carData,
+  } = useQuery(GET_CAR, {
+    variables: {
+      id: carId,
+    },
+    skip: !carId,
+  });
 
+  console.log(`carData`, carData);
   useEffect(() => {
-    const getData = async () => {
-      if (carId) {
-        const response = await dispatch(getCar(carId));
-        if (response) {
-          setCar({ ...response });
-        }
-        setCar({ ...response });
-
-        if (token) {
-          const response2 = await dispatch(getMe());
-          if (response2) {
-            setMe({ ...response2 });
-          }
-
-          if (response) {
-            const response3 = await dispatch(getUser(response.UserId));
-            if (response3) {
-              setOwner({ ...response3 });
-            }
-          }
-        }
-
-        setLoading(false);
-      }
-    };
-    getData();
-  }, [dispatch, token]);
-
-  const handleStartChat = async (e) => {
-    setStartingChat(true);
-    const response = await dispatch(createNewChat(owner.id));
-    if (response) {
-      setStartingChat(false);
-      let route = "/chats";
-      const win = window.open(route, "_blank");
-      win.focus();
+    if (carData && carData.car) {
+      // setCar({ ...carData.car });
     }
-  };
+  }, [carData]);
 
-  if (loading) {
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     if (carId) {
+  //       const response = await dispatch(getCar(carId));
+  //       if (response) {
+  //         setCar({ ...response });
+  //       }
+  //       setCar({ ...response });
+
+  //       if (token) {
+  //         const response2 = await dispatch(getMe());
+  //         if (response2) {
+  //           setMe({ ...response2 });
+  //         }
+
+  //         if (response) {
+  //           const response3 = await dispatch(getUser(response.UserId));
+  //           if (response3) {
+  //             setOwner({ ...response3 });
+  //           }
+  //         }
+  //       }
+
+  //       setLoading(false);
+  //     }
+  //   };
+  //   getData();
+  // }, [dispatch, token]);
+
+  // const handleStartChat = async (e) => {
+  //   setStartingChat(true);
+  //   const response = await dispatch(createNewChat(owner.id));
+  //   if (response) {
+  //     setStartingChat(false);
+  //     let route = "/chats";
+  //     const win = window.open(route, "_blank");
+  //     win.focus();
+  //   }
+  // };
+
+  if (gloading) {
     return <Loading isCar />;
   }
 
@@ -70,7 +89,7 @@ export default function Car() {
           {car &&
             car.images &&
             car.images.map((img, idx) => (
-              <Carousel.Item key={idx} indicators={false} interval={null}>
+              <Carousel.Item key={idx} indicators="false" interval={null}>
                 <img
                   className="d-block w-100 carousel-img"
                   src={img}
@@ -120,7 +139,7 @@ export default function Car() {
             <button
               className="btn bg-orange"
               disabled={startingChat}
-              onClick={handleStartChat}
+              // onClick={handleStartChat}
             >
               {startingChat ? "Initializing..." : "Start Chat"}
             </button>

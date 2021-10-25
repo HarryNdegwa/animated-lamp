@@ -3,8 +3,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { Op } = require("sequelize");
 const ShortUniqueId = require("short-unique-id");
-
 const { SECRET_KEY } = require("../constants");
+const { fetchUser } = require("../util/user");
 
 exports.schema = gql`
   type ChatUser {
@@ -19,12 +19,12 @@ exports.schema = gql`
   type User {
     id: ID!
     username: String!
-    password: String!
+    # password: String!
     chatUsers: [ChatUser]
   }
 
   extend type Query {
-    getUser(id: ID!): User
+    user(id: ID!): User
     users: [User]
     getNewChatUsers: [User]
     me: User
@@ -46,13 +46,6 @@ exports.schema = gql`
 const generateToken = (user) => {
   return jwt.sign({ id: user.id }, SECRET_KEY, {
     expiresIn: 8640000,
-  });
-};
-
-const fetchUser = (id, db) => {
-  return db.User.findOne({
-    where: { id },
-    attributes: { exclude: ["password"] },
   });
 };
 
@@ -102,7 +95,7 @@ exports.resolvers = {
       }
     },
 
-    async getUser(root, { id }, { db, res, req }, info) {
+    async user(root, { id }, { db, res, req }, info) {
       try {
         const user = await fetchUser(id, db);
         return user;
