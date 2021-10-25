@@ -17,14 +17,14 @@ exports.schema = gql`
   }
 
   type User {
-    id: ID!
+    id: Int!
     username: String!
     # password: String!
     chatUsers: [ChatUser]
   }
 
   extend type Query {
-    user(id: ID!): User
+    user(id: Int!): User
     users: [User]
     getNewChatUsers: [User]
     me: User

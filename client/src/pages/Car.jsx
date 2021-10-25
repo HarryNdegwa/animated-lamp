@@ -69,7 +69,7 @@ export default function Car() {
               {token && <small>Car posted by {owner && owner.username}</small>}
             </div>
 
-            {car && me && car.UserId == me.id && (
+            {car && me && car.UserId === me.id && (
               <Link to={`/update-car/${car && car.id}`}>Edit Car</Link>
             )}
           </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-import { addCar, updateCar, uploadImage } from "../redux/reducers/api/car";
+import { uploadImage } from "../redux/reducers/api/car";
 import { useMutation } from "@apollo/client";
 import { ADD_CAR, UPDATE_CAR } from "../apollo/mutations/car.js";
 
@@ -71,6 +71,7 @@ export default function EntryForm({ edit, data: myCar, carId }) {
       year: "",
       location: "",
     });
+
     history.replace("/");
   };
 
