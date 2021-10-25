@@ -32,7 +32,7 @@ exports.schema = gql`
     location: String
     UserId: Int
     owner: User
-    # me: User
+    me: User
   }
 
   extend type Query {
@@ -92,16 +92,18 @@ exports.resolvers = {
           car = await db.Car.findOne({ where: { id: parseInt(id, 10) } });
         }
 
-        let owner = await fetchUser(car.UserId, db);
-
-        car.owner = owner;
-
         return car;
       } catch (error) {
         console.log(`error`, error);
         res.status(400).send("Bad request!");
       }
     },
+  },
+
+  SingleCarResponse: {
+    owner: async (root, args, { db }, info) => await fetchUser(root.UserId, db),
+    me: async (root, args, { db, req }, info) =>
+      await fetchUser(req.userId, db),
   },
 
   Mutation: {

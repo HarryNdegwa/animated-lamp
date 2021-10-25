@@ -26,10 +26,12 @@ export const GET_CAR = gql`
       year
       owner {
         username
+        id
+      }
+      me {
+        id
+        username
       }
     }
-    # me {
-    #   username
-    # }
   }
 `;

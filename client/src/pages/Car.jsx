@@ -31,52 +31,13 @@ export default function Car() {
     skip: !carId,
   });
 
-  console.log(`carData`, carData);
   useEffect(() => {
     if (carData && carData.car) {
-      // setCar({ ...carData.car });
+      setCar({ ...carData.car });
+      setMe({ ...carData.car.me });
+      setOwner({ ...carData.car.owner });
     }
   }, [carData]);
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     if (carId) {
-  //       const response = await dispatch(getCar(carId));
-  //       if (response) {
-  //         setCar({ ...response });
-  //       }
-  //       setCar({ ...response });
-
-  //       if (token) {
-  //         const response2 = await dispatch(getMe());
-  //         if (response2) {
-  //           setMe({ ...response2 });
-  //         }
-
-  //         if (response) {
-  //           const response3 = await dispatch(getUser(response.UserId));
-  //           if (response3) {
-  //             setOwner({ ...response3 });
-  //           }
-  //         }
-  //       }
-
-  //       setLoading(false);
-  //     }
-  //   };
-  //   getData();
-  // }, [dispatch, token]);
-
-  // const handleStartChat = async (e) => {
-  //   setStartingChat(true);
-  //   const response = await dispatch(createNewChat(owner.id));
-  //   if (response) {
-  //     setStartingChat(false);
-  //     let route = "/chats";
-  //     const win = window.open(route, "_blank");
-  //     win.focus();
-  //   }
-  // };
 
   if (gloading) {
     return <Loading isCar />;
