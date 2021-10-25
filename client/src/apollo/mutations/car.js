@@ -5,3 +5,9 @@ export const ADD_CAR = gql`
     addCar(input: $input)
   }
 `;
+
+export const UPDATE_CAR = gql`
+  mutation UpdateCar($input: CarInput!, $id: Int!) {
+    updateCar(input: $input, carId: $id)
+  }
+`;

@@ -3,7 +3,7 @@ const { fetchUser } = require("../util/user");
 
 exports.schema = gql`
   type Car {
-    id: ID!
+    id: Int!
     name: String!
     make: String!
     model: String!
@@ -13,7 +13,7 @@ exports.schema = gql`
   }
 
   type CarResponse {
-    id: ID!
+    id: Int!
     name: String!
     make: String!
     model: String!
@@ -23,7 +23,7 @@ exports.schema = gql`
   }
 
   type SingleCarResponse {
-    id: ID!
+    id: Int!
     name: String!
     make: String!
     model: String!
@@ -36,7 +36,7 @@ exports.schema = gql`
   }
 
   extend type Query {
-    car(id: ID!): SingleCarResponse
+    car(id: Int!): SingleCarResponse
     cars: [CarResponse]
   }
 

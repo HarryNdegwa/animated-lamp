@@ -15,7 +15,7 @@ export const GET_CARS = gql`
 `;
 
 export const GET_CAR = gql`
-  query GetCar($id: ID!) {
+  query GetCar($id: Int!) {
     car(id: $id) {
       id
       name
@@ -24,6 +24,7 @@ export const GET_CAR = gql`
       images
       location
       year
+      UserId
       owner {
         username
         id
@@ -32,6 +33,20 @@ export const GET_CAR = gql`
         id
         username
       }
+    }
+  }
+`;
+
+export const GET_UPDATE_CAR = gql`
+  query GetUpdateCar($id: Int!) {
+    car(id: $id) {
+      # id
+      name
+      make
+      model
+      images
+      location
+      year
     }
   }
 `;
