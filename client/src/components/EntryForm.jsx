@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { addCar, updateCar, uploadImage } from "../redux/reducers/api/car";
+import { useMutation } from "@apollo/client";
+import { ADD_CAR } from "../apollo/mutations/car.js";
 
-export default function EntryForm({ edit, data, carId }) {
+export default function EntryForm({ edit, data: myCar, carId }) {
   const [values, setValues] = useState({
     name: "",
     make: "",
@@ -12,16 +14,18 @@ export default function EntryForm({ edit, data, carId }) {
     year: "",
     location: "",
   });
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
 
-  useEffect(() => {
-    if (edit) {
-      setValues({ ...data });
-    }
-  }, [edit, data]);
+  const [addCar, { data, loading, error }] = useMutation(ADD_CAR);
+
+  // useEffect(() => {
+  //   if (edit) {
+  //     setValues({ ...data });
+  //   }
+  // }, [edit, data]);
 
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -49,14 +53,14 @@ export default function EntryForm({ edit, data, carId }) {
     e.preventDefault();
     const payload = { ...values };
 
-    setLoading(true);
+    // setLoading(true);
     if (edit) {
       await dispatch(updateCar(carId, payload));
     } else {
-      await dispatch(addCar(payload));
+      addCar({ variables: { input: { ...payload } } });
     }
 
-    setLoading(false);
+    // setLoading(false);
     setValues({
       name: "",
       make: "",

@@ -8,9 +8,9 @@ import Loading from "../components/Loading";
 
 export default function Home() {
   const [cars, setCars] = useState([]);
-  // const dispatch = useDispatch();
-  const { loading, error, data } = useQuery(GET_CARS);
-  // console.log(`data`, data);
+  const { loading, error, data } = useQuery(GET_CARS, {
+    fetchPolicy: "cache-and-network",
+  });
 
   useEffect(() => {
     if (!loading && !error && data && data.cars) {
