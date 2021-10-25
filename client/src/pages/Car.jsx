@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router";
-import { getCar } from "../redux/reducers/api/car";
+// import { getCar } from "../redux/reducers/api/car";
 import Carousel from "react-bootstrap/Carousel";
-import { createNewChat, getMe, getUser } from "../redux/reducers/api/auth";
+// import { createNewChat, getMe, getUser } from "../redux/reducers/api/auth";
 import { Link } from "react-router-dom";
 import Loading from "../components/Loading";
 import { useQuery } from "@apollo/client";
@@ -11,15 +11,15 @@ import { GET_CAR } from "../apollo/queries/car";
 
 export default function Car() {
   const [car, setCar] = useState(null);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const location = useLocation();
   const carId = parseInt(location.pathname.split("/")[2], 10);
   const [me, setMe] = useState(null);
   const { qid: token } = useSelector((state) => state.auth);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [owner, setOwner] = useState(null);
   const [startingChat, setStartingChat] = useState(false);
-  const history = useHistory();
+  // const history = useHistory();
   const {
     loading: gloading,
     error,
@@ -54,7 +54,7 @@ export default function Car() {
                 <img
                   className="d-block w-100 carousel-img"
                   src={img}
-                  alt="First slide"
+                  alt={`slide-${idx + 1}`}
                 />
               </Carousel.Item>
             ))}
